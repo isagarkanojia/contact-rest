@@ -1,5 +1,6 @@
 package com.contact.api.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
@@ -30,7 +31,7 @@ public class ContactService {
 	private UserRepository userRepository;
 
 	public Contact saveContact(Contact contact, Long bookId, Long userId) throws ContactUniqueEmailException {
-		Collection<Object> emails = contactRepository.findContactInContactBookByEmail(contact.getEmail(),bookId);
+		Collection<Object> emails = contactRepository.findContactInContactBookByEmail(contact.getEmail(), bookId);
 		if (!emails.isEmpty()) {
 			throw new ContactUniqueEmailException(contact.getEmail());
 		} else {
@@ -71,6 +72,19 @@ public class ContactService {
 			throw new ContactNotFoundException(contactId);
 		}
 
+	}
+
+	public ArrayList<Contact> getContactsBySearch(Long bookId, String search) throws BookNotFoundException {
+		Optional<ContactBook> book = contactBookRepository.findByIdAndRetired(bookId, false);
+		if (book.isPresent()) {
+
+			Collection<Contact> contacts = contactRepository.searchInContactBookByEmailAndName(search, bookId);
+
+			return (ArrayList<Contact>) contacts;
+
+		} else {
+			throw new BookNotFoundException(bookId);
+		}
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.contact.api.controller;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,4 +98,22 @@ public class ContactConroller {
 
 	}
 
+	
+	@GetMapping("/contacts/{search}")
+	public Response<Contact> getContactsBySearch(@PathVariable("bookId") Long bookId,
+			@PathVariable("search") String search) {
+		Response<Contact> resp = new Response<>();
+		ArrayList<Contact> result = null;
+		try {
+			result = contactService.getContactsBySearch(bookId,search);
+		} catch (Exception e) {
+			resp.setError(new ErrorDto("600", e.getMessage()));
+			resp.setSuccess(false);
+		}
+		resp.setData(result);
+		resp.setSuccess(true);
+		return resp;
+	}
+
+	
 }
