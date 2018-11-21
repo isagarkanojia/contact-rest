@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.contact.api.exception.BookNotFoundException;
+import com.contact.api.exception.ContactNotFoundException;
+import com.contact.api.exception.ContactUniqueEmailException;
 import com.contact.api.model.Contact;
 import com.contact.api.payload.ContactRequest;
+import com.contact.api.payload.ErrorDto;
 import com.contact.api.response.Response;
 import com.contact.api.response.SingleResponse;
 import com.contact.api.service.ContactService;
@@ -26,33 +30,47 @@ public class ContactConroller {
 
 	@Autowired
 	private ContactService contactService;
-	
+
 	@PostMapping("/contact")
 	public SingleResponse<Contact> saveContact(@RequestBody ContactRequest contactRequest,
-			@PathVariable("bookId") Long bookId,@RequestHeader(value = "Authorization") String authHeader) {
+			@PathVariable("bookId") Long bookId, @RequestHeader(value = "Authorization") String authHeader) {
 		SingleResponse<Contact> resp = new SingleResponse<>();
 		Long userId = AuthUtils.getUserIdFromToken(authHeader);
 		Contact contact = new Contact(contactRequest);
-		Contact result = contactService.saveContact(contact, bookId,userId);
-		resp.setData(result);
+		try {
+			contact = contactService.saveContact(contact, bookId, userId);
+		} catch (ContactUniqueEmailException e) {
+			resp.setError(new ErrorDto("600", e.getMessage()));
+			resp.setSuccess(false);
+		} catch (Exception e) {
+			resp.setError(new ErrorDto("600", e.getMessage()));
+			resp.setSuccess(false);
+		}
 		resp.setSuccess(true);
 		return resp;
 	}
-	
+
 	@GetMapping("/contacts")
 	public Response<Contact> getContacts(@PathVariable("bookId") Long bookId) {
 		Response<Contact> resp = new Response<>();
-		Set<Contact> result = contactService.getContacts(bookId);
+		Set<Contact> result = null;
+		try {
+			result = contactService.getContacts(bookId);
+		} catch (BookNotFoundException e) {
+			resp.setError(new ErrorDto("600", e.getMessage()));
+			resp.setSuccess(false);
+		} catch (Exception e) {
+			resp.setError(new ErrorDto("600", e.getMessage()));
+			resp.setSuccess(false);
+		}
 		resp.setData(result);
 		resp.setSuccess(true);
 		return resp;
 	}
 
-	
-	
 	@PutMapping("/contact/{contactId}")
-	public SingleResponse<Contact> updateContact(@PathVariable("contactId") Long contactId
-			,@RequestBody ContactRequest contactRequest) {
+	public SingleResponse<Contact> updateContact(@PathVariable("contactId") Long contactId,
+			@RequestBody ContactRequest contactRequest) {
 		SingleResponse<Contact> resp = new SingleResponse<>();
 		Contact contact = new Contact(contactRequest);
 		contact.setId(contactId);
@@ -61,15 +79,22 @@ public class ContactConroller {
 		resp.setSuccess(true);
 		return resp;
 	}
-	
+
 	@DeleteMapping("/contact/{contactId}")
 	public SingleResponse<Contact> deleteContact(@PathVariable("contactId") Long contactId) {
 		SingleResponse<Contact> resp = new SingleResponse<>();
-		Contact result=contactService.deleteContact(contactId);
-		resp.setData(result);
+		try {
+			contactService.deleteContact(contactId);
+		} catch (ContactNotFoundException e) {
+			resp.setError(new ErrorDto("600", e.getMessage()));
+			resp.setSuccess(false);
+		} catch (Exception e) {
+			resp.setError(new ErrorDto("600", e.getMessage()));
+			resp.setSuccess(false);
+		}
 		resp.setSuccess(true);
 		return resp;
+
 	}
-	
-	
+
 }
