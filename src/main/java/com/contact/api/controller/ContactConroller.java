@@ -1,9 +1,11 @@
 package com.contact.api.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.contact.api.exception.BookNotFoundException;
@@ -54,7 +57,7 @@ public class ContactConroller {
 	@GetMapping("/contacts")
 	public Response<Contact> getContacts(@PathVariable("bookId") Long bookId) {
 		Response<Contact> resp = new Response<>();
-		Set<Contact> result = null;
+		List<Contact> result = null;
 		try {
 			result = contactService.getContacts(bookId);
 		} catch (BookNotFoundException e) {
@@ -71,10 +74,11 @@ public class ContactConroller {
 
 	@PutMapping("/contact/{contactId}")
 	public SingleResponse<Contact> updateContact(@PathVariable("contactId") Long contactId,
-			@RequestBody ContactRequest contactRequest) {
+			@RequestBody ContactRequest contactRequest,@PathVariable("bookId") Long bookId) {
 		SingleResponse<Contact> resp = new SingleResponse<>();
 		Contact contact = new Contact(contactRequest);
 		contact.setId(contactId);
+		contact.setContactbookid(bookId);
 		Contact result = contactService.updateContact(contact);
 		resp.setData(result);
 		resp.setSuccess(true);
@@ -113,6 +117,23 @@ public class ContactConroller {
 		resp.setData(result);
 		resp.setSuccess(true);
 		return resp;
+	}
+
+	
+	@GetMapping("/contactsPage")
+	public Page<Contact> getContactsPage(@PathVariable("bookId") Long bookId,@RequestParam(defaultValue="0") int page) {
+		Response<Contact> resp = new Response<>();
+		Page<Contact> result = null;
+		try {
+			
+			result=contactService.getContactsPage(bookId,page);
+		
+		} catch (Exception e) {
+			resp.setError(new ErrorDto("600", e.getMessage()));
+			resp.setSuccess(false);
+		}
+		
+		return result;
 	}
 
 	

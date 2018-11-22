@@ -15,18 +15,18 @@ import lombok.Data;
 public abstract class BaseDomain 
 {
 
-	@JsonIgnore private Instant modifiedDate;
-	@JsonIgnore private Instant createdDate;
-	@JsonIgnore private String modifiedBy;
-	@JsonIgnore private String createdBy;
+	@JsonIgnore private Instant modifieddate;
+	@JsonIgnore private Instant createddate;
+	@JsonIgnore private String modifiedby;
+	@JsonIgnore private String createdby;
 	@JsonIgnore private Boolean retired;
 
 
 	@PrePersist
 	protected void onCreate()
 	{
-		createdDate = Instant.now();
-		modifiedDate = Instant.now();
+		createddate = Instant.now();
+		modifieddate = Instant.now();
 		retired=false;
 		
 	}
@@ -34,7 +34,7 @@ public abstract class BaseDomain
 	@PreUpdate
 	protected void onUpdate()
 	{
-		modifiedDate = Instant.now();
+		modifieddate = Instant.now();
 		
 	}
 

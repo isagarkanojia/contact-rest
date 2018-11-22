@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
@@ -70,14 +69,7 @@ public class User extends BaseDomain {
     @Where(clause = "retired=0")
     private Set<Role> roles = new HashSet<>();
     
-    
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    @JoinTable(name = "user_contact_book",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "contact_book_id"))
-    @Where(clause = "retired=0")
-    private Set<ContactBook> contactBooks = new HashSet<>();
-    
+       
     
     public User() {
 

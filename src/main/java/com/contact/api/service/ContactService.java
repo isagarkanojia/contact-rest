@@ -2,10 +2,14 @@ package com.contact.api.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.contact.api.exception.BookNotFoundException;
@@ -31,26 +35,23 @@ public class ContactService {
 	private UserRepository userRepository;
 
 	public Contact saveContact(Contact contact, Long bookId, Long userId) throws ContactUniqueEmailException {
-		Collection<Object> emails = contactRepository.findContactInContactBookByEmail(contact.getEmail(), bookId);
+		List<Contact> emails = contactRepository.findByEmailAndContactbookid(contact.getEmail(), bookId);
 		if (!emails.isEmpty()) {
 			throw new ContactUniqueEmailException(contact.getEmail());
 		} else {
 			User user = userRepository.findById(userId).get();
-			ContactBook book = contactBookRepository.findById(bookId).get();
-			contact.setCreatedBy(user.getUsername());
-			contact.setModifiedBy(user.getUsername());
+			contact.setCreatedby(user.getUsername());
+			contact.setModifiedby(user.getUsername());
+			contact.setContactbookid(bookId);
 			contact = contactRepository.save(contact);
-			book.getContacts().add(contact);
-			userRepository.save(user);
 			return contact;
 		}
 	}
 
-	public Set<Contact> getContacts(Long bookId) throws BookNotFoundException {
+	public List<Contact> getContacts(Long bookId) throws BookNotFoundException {
 		Optional<ContactBook> book = contactBookRepository.findByIdAndRetired(bookId, false);
 		if (book.isPresent()) {
-			ContactBook b = book.get();
-			return b.getContacts();
+			return contactRepository.findByContactbookidAndRetired(bookId, false);
 		} else {
 			throw new BookNotFoundException(bookId);
 		}
@@ -87,4 +88,11 @@ public class ContactService {
 		}
 	}
 
+	public Page<Contact> getContactsPage(Long bookId, int page) {
+		return contactRepository.findByContactbookidAndRetired(bookId,false,createPageRequest(page));
+	}
+
+	private Pageable createPageRequest(int page) {
+	    return new PageRequest(page, 2);
+	}
 }

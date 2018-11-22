@@ -1,6 +1,6 @@
 package com.contact.api.controller;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,7 +41,7 @@ public class ContactBookController {
 	public Response<ContactBook> getBooks(@RequestHeader(value = "Authorization") String authHeader) {
 		Response<ContactBook> resp = new Response<>();
 		Long userId = AuthUtils.getUserIdFromToken(authHeader);
-		Set<ContactBook> result = contactBookService.getBooks(userId);
+		List<ContactBook> result = contactBookService.getBooks(userId);
 		resp.setData(result);
 		resp.setSuccess(true);
 		return resp;

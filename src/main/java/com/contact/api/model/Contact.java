@@ -24,13 +24,15 @@ public class Contact extends BaseDomain {
     @Size(max = 40)
     private String name;
 
+    private Long contactbookid;
+     
     @NotBlank
     @Size(max = 40)
     private String email;
 
     
-    @Size(max = 100)
-    private String number;
+
+    private Long number;
     
     
     public Contact() {
@@ -43,39 +45,7 @@ public class Contact extends BaseDomain {
 		this.number=contactRequest.getNumber();
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Contact other = (Contact) obj;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		return true;
-	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		return result;
-	}
-
-
-	
 
 
 }

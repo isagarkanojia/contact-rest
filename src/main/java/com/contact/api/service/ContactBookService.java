@@ -1,7 +1,7 @@
 package com.contact.api.service;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,6 @@ import com.contact.api.exception.BookNotFoundException;
 import com.contact.api.model.ContactBook;
 import com.contact.api.model.User;
 import com.contact.api.repository.ContactBookRepository;
-import com.contact.api.repository.ContactRepository;
 import com.contact.api.repository.UserRepository;
 
 @Service
@@ -19,26 +18,22 @@ public class ContactBookService {
 	@Autowired
 	private ContactBookRepository contactBookRepository;
 	
-	@Autowired
-	private ContactRepository contactRepository;
 	
 	@Autowired
 	private UserRepository userRepository;
 
 	public ContactBook saveBook(ContactBook contactBook, Long userId) {	
 		User user=userRepository.findById(userId).get();
-		contactBook.setCreatedBy(user.getUsername());
-		contactBook.setModifiedBy(user.getUsername());
+		contactBook.setCreatedby(user.getUsername());
+		contactBook.setModifiedby(user.getUsername());
+		contactBook.setUserid(user.getId());
 		ContactBook book=contactBookRepository.save(contactBook);
-		user.getContactBooks().add(book);
-		userRepository.save(user);
 		return book;
 		
 	}
 
-	public Set<ContactBook> getBooks(Long userId) {
-		User user =userRepository.findById(userId).get();
-		return user.getContactBooks();
+	public List<ContactBook> getBooks(Long userId) {
+		return contactBookRepository.findByUseridAndRetired(userId,false);
 	}
 
 	public ContactBook deleteBook(Long bookId) throws BookNotFoundException {
@@ -51,7 +46,6 @@ public class ContactBookService {
 		}else{
 			throw new BookNotFoundException(bookId);
 		}
-		
 	}
 
 }

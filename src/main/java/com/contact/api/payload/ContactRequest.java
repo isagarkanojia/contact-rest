@@ -20,6 +20,6 @@ public class ContactRequest {
     private String email;
     
     @Size(max = 10)
-    private String number;
+    private Long number;
     
 }
