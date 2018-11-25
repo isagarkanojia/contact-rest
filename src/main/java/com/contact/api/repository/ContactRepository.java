@@ -29,5 +29,7 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
 	Long bookId, @Param("b") boolean b, @Param("search") String search,
 			Pageable createPageRequest);
 
+	List<Contact> findByEmailAndContactbookidAndRetired(String email, Long bookId, boolean b);
+
 			
 }

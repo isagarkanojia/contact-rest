@@ -32,7 +32,7 @@ public class ContactService {
 	private UserRepository userRepository;
 
 	public Contact saveContact(Contact contact, Long bookId, Long userId) throws ContactUniqueEmailException {
-		List<Contact> emails = contactRepository.findByEmailAndContactbookid(contact.getEmail(), bookId);
+		List<Contact> emails = contactRepository.findByEmailAndContactbookidAndRetired(contact.getEmail(), bookId,false);
 		if (!emails.isEmpty()) {
 			throw new ContactUniqueEmailException(contact.getEmail());
 		} else {
