@@ -6,6 +6,7 @@ import org.springframework.util.StringUtils;
 import com.unboundid.util.json.JSONException;
 import com.unboundid.util.json.JSONObject;
 
+
 public class AuthUtils {
 
 	public static Long getUserIdFromToken(String authHeader) {
