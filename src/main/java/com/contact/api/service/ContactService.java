@@ -1,7 +1,5 @@
 package com.contact.api.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,24 +72,15 @@ public class ContactService {
 
 	}
 
-	public ArrayList<Contact> getContactsBySearch(Long bookId, String search) throws BookNotFoundException {
-		Optional<ContactBook> book = contactBookRepository.findByIdAndRetired(bookId, false);
-		if (book.isPresent()) {
-
-			Collection<Contact> contacts = contactRepository.searchInContactBookByEmailAndName(search, bookId);
-
-			return (ArrayList<Contact>) contacts;
-
-		} else {
-			throw new BookNotFoundException(bookId);
-		}
-	}
-
 	public Page<Contact> getContactsPage(Long bookId, int page) {
 		return contactRepository.findByContactbookidAndRetired(bookId,false,createPageRequest(page));
 	}
 
 	private Pageable createPageRequest(int page) {
-	    return new PageRequest(page, 2);
+	    return new PageRequest(page, 10);
+	}
+	
+	public Page<Contact> getContactsPageSearch(Long bookId, int page,String search) {
+		return contactRepository.findByContactbookidAndRetiredAndNameContainingIgnoreCaseOrEmailContainingIgnoreCase(bookId,false,search,search,createPageRequest(page));
 	}
 }

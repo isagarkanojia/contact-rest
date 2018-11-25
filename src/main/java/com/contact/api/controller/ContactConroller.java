@@ -107,25 +107,7 @@ public class ContactConroller {
 
 	}
 
-	
-	@GetMapping("/contacts/{search}")
-	public Response<Contact> getContactsBySearch(@PathVariable("bookId") Long bookId,
-			@PathVariable("search") String search) {
-		Response<Contact> resp = new Response<>();
-		ArrayList<Contact> result = null;
-		try {
-			result = contactService.getContactsBySearch(bookId,search);
-		} catch (Exception e) {
-			resp.setError(new ErrorDto("600", e.getMessage()));
-			resp.setSuccess(false);
-			return resp;
-		}
-		resp.setData(result);
-		resp.setSuccess(true);
-		return resp;
-	}
-
-	
+		
 	@GetMapping("/contactsPage")
 	public Page<Contact> getContactsPage(@PathVariable("bookId") Long bookId,@RequestParam(defaultValue="0") int page) {
 		Response<Contact> resp = new Response<>();
@@ -133,6 +115,24 @@ public class ContactConroller {
 		try {
 			
 			result=contactService.getContactsPage(bookId,page);
+		
+		} catch (Exception e) {
+			resp.setError(new ErrorDto("600", e.getMessage()));
+			resp.setSuccess(false);
+			return null;
+		}
+		
+		return result;
+	}
+	
+	@GetMapping("/contactsPage/{search}")
+	public Page<Contact> getContactsPageSearch(@PathVariable("bookId")
+	Long bookId,@RequestParam(defaultValue="0") int page,@PathVariable("search") String search) {
+		Response<Contact> resp = new Response<>();
+		Page<Contact> result = null;
+		try {
+			
+			result=contactService.getContactsPageSearch(bookId,page,search);
 		
 		} catch (Exception e) {
 			resp.setError(new ErrorDto("600", e.getMessage()));
