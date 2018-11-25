@@ -2,7 +2,6 @@ package com.contact.api.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,9 +45,11 @@ public class ContactConroller {
 		} catch (ContactUniqueEmailException e) {
 			resp.setError(new ErrorDto("600", e.getMessage()));
 			resp.setSuccess(false);
+			return resp;
 		} catch (Exception e) {
 			resp.setError(new ErrorDto("600", e.getMessage()));
 			resp.setSuccess(false);
+			return resp;
 		}
 		resp.setSuccess(true);
 		return resp;
@@ -63,9 +64,11 @@ public class ContactConroller {
 		} catch (BookNotFoundException e) {
 			resp.setError(new ErrorDto("600", e.getMessage()));
 			resp.setSuccess(false);
+			return resp;
 		} catch (Exception e) {
 			resp.setError(new ErrorDto("600", e.getMessage()));
 			resp.setSuccess(false);
+			return resp;
 		}
 		resp.setData(result);
 		resp.setSuccess(true);
@@ -93,9 +96,11 @@ public class ContactConroller {
 		} catch (ContactNotFoundException e) {
 			resp.setError(new ErrorDto("600", e.getMessage()));
 			resp.setSuccess(false);
+			return resp;
 		} catch (Exception e) {
 			resp.setError(new ErrorDto("600", e.getMessage()));
 			resp.setSuccess(false);
+			return resp;
 		}
 		resp.setSuccess(true);
 		return resp;
@@ -113,6 +118,7 @@ public class ContactConroller {
 		} catch (Exception e) {
 			resp.setError(new ErrorDto("600", e.getMessage()));
 			resp.setSuccess(false);
+			return resp;
 		}
 		resp.setData(result);
 		resp.setSuccess(true);
@@ -131,6 +137,7 @@ public class ContactConroller {
 		} catch (Exception e) {
 			resp.setError(new ErrorDto("600", e.getMessage()));
 			resp.setSuccess(false);
+			return null;
 		}
 		
 		return result;

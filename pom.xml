@@ -8,7 +8,6 @@
 		<version>2.0.3.RELEASE</version>
 	</parent>
 	<groupId>com.contact</groupId>
-	<artifactId>api</artifactId>
 	<version>0.0.1</version>
 	<name>contact-java-rest</name>
 	<description>Contact App</description>
@@ -219,4 +218,5 @@
 			<url>https://repo.spring.io/libs-release</url>
 		</pluginRepository>
 	</pluginRepositories>
+	<artifactId>contact.api</artifactId>
 </project>

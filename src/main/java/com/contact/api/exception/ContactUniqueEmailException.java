@@ -8,7 +8,7 @@ public class ContactUniqueEmailException extends Exception {
     private String email;
     
     public ContactUniqueEmailException(String email) {
-        super(String.format("Contact with email \" %s \" already exists", email));
+        super(String.format("Contact with email:  %s  already exists", email));
         this.email=email;
     }
 

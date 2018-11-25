@@ -55,9 +55,11 @@ public class ContactBookController {
 		} catch (BookNotFoundException e) {
 			resp.setError(new ErrorDto("600", e.getMessage()));
 			resp.setSuccess(false);
+			return resp;
 		} catch (Exception e) {
 			resp.setError(new ErrorDto("600", e.getMessage()));
 			resp.setSuccess(false);
+			return resp;
 		}
 		resp.setSuccess(true);
 		return resp;
