@@ -1,6 +1,5 @@
 package com.contact.api.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +76,7 @@ public class ContactConroller {
 
 	@PutMapping("/contact/{contactId}")
 	public SingleResponse<Contact> updateContact(@PathVariable("contactId") Long contactId,
-			@RequestBody ContactRequest contactRequest,@PathVariable("bookId") Long bookId) {
+			@RequestBody ContactRequest contactRequest, @PathVariable("bookId") Long bookId) {
 		SingleResponse<Contact> resp = new SingleResponse<>();
 		Contact contact = new Contact(contactRequest);
 		contact.setId(contactId);
@@ -107,41 +106,40 @@ public class ContactConroller {
 
 	}
 
-		
 	@GetMapping("/contactsPage")
-	public Page<Contact> getContactsPage(@PathVariable("bookId") Long bookId,@RequestParam(defaultValue="0") int page) {
+	public Page<Contact> getContactsPage(@PathVariable("bookId") Long bookId,
+			@RequestParam(defaultValue = "0") int page) {
 		Response<Contact> resp = new Response<>();
 		Page<Contact> result = null;
 		try {
-			
-			result=contactService.getContactsPage(bookId,page);
-		
+
+			result = contactService.getContactsPage(bookId, page);
+
 		} catch (Exception e) {
 			resp.setError(new ErrorDto("600", e.getMessage()));
 			resp.setSuccess(false);
 			return null;
 		}
-		
-		return result;
-	}
-	
-	@GetMapping("/contactsPage/{search}")
-	public Page<Contact> getContactsPageSearch(@PathVariable("bookId")
-	Long bookId,@RequestParam(defaultValue="0") int page,@PathVariable("search") String search) {
-		Response<Contact> resp = new Response<>();
-		Page<Contact> result = null;
-		try {
-			
-			result=contactService.getContactsPageSearch(bookId,page,search);
-		
-		} catch (Exception e) {
-			resp.setError(new ErrorDto("600", e.getMessage()));
-			resp.setSuccess(false);
-			return null;
-		}
-		
+
 		return result;
 	}
 
-	
+	@GetMapping("/contactsPage/{search}")
+	public Page<Contact> getContactsPageSearch(@PathVariable("bookId") Long bookId,
+			@RequestParam(defaultValue = "0") int page, @PathVariable("search") String search) {
+		Response<Contact> resp = new Response<>();
+		Page<Contact> result = null;
+		try {
+
+			result = contactService.getContactsPageSearch(bookId, page, search);
+
+		} catch (Exception e) {
+			resp.setError(new ErrorDto("600", e.getMessage()));
+			resp.setSuccess(false);
+			return null;
+		}
+
+		return result;
+	}
+
 }
