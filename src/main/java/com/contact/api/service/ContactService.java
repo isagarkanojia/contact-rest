@@ -81,6 +81,6 @@ public class ContactService {
 	}
 	
 	public Page<Contact> getContactsPageSearch(Long bookId, int page,String search) {
-		return contactRepository.findByContactbookidAndRetiredAndNameContainingIgnoreCaseOrEmailContainingIgnoreCase(bookId,false,search,search,createPageRequest(page));
+		return contactRepository.findByContactbookidAndRetiredAndNameOrEmailContainingIgnoreCase(bookId,false,search,createPageRequest(page));
 	}
 }
